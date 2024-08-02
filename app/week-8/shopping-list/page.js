@@ -1,17 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
-import ItemList from "../week-7/item-list";
-import NewItem from "../week-7/new-item";
+import React, { useState, useEffect } from "react";
+import ItemList from "./item-list";
+import NewItem from "./new-item";
 import itemsData from "./items.json";
-import MealIdeas from "../week-7/meal-ideas";
-
+import MealIdeas from "./meal-ideas";
+import { useUserAuth } from "../_utils/auth-context";
+import { useRouter } from 'next/navigation';
 
 export default function Week3() {
+    const { user } = useUserAuth();
+    const router = useRouter();
+    
     let itemsArray = itemsData.map(
         (item) => ({ ...item })
     );
     
+    useEffect(() => {
+        if (!user) {
+          router.push('/');
+        } else {
+          null;
+        }
+      }, [user, router]);
+
     const [items, setItems] = useState(itemsArray);
 
     const handleAddItem = (NewItem) => {
